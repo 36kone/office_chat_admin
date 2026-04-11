@@ -230,7 +230,7 @@ export function ChatsPage({ }: ChatsPageProps) {
 
             {/* Messages */}
             <div className="flex-1 p-6 z-10 overflow-y-auto">
-              <div className="flex flex-col gap-4 max-w-4xl mx-auto">
+              <div className="flex flex-col gap-4 w-full">
                 <div className="flex justify-center my-4">
                   <span className="bg-white/80 backdrop-blur-sm px-4 py-1 rounded-lg text-[11px] text-gray-500 font-medium shadow-sm">
                     31 de março de 2026
@@ -266,7 +266,7 @@ export function ChatsPage({ }: ChatsPageProps) {
 
             {/* Input Area */}
             <div className="p-4 bg-white border-t border-gray-200 z-10">
-              <div className="max-w-4xl mx-auto flex gap-3 items-center bg-gray-50 rounded-full px-4 py-2 border border-gray-100">
+              <div className="w-full flex gap-3 items-center bg-gray-50 rounded-full px-4 py-2 border border-gray-100">
                 <div className="flex gap-2">
                   <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-accent">
                     <FileText className="h-5 w-5" />

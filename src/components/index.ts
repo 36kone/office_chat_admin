@@ -11,6 +11,8 @@ export { Label } from './ui/label';
 export { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from './ui/dialog';
 export { Progress } from './ui/progress';
 export { Alert, AlertDescription, AlertTitle } from './ui/alert';
+export { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter, SheetClose, SheetDescription } from './ui/sheet';
+export { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from './ui/select';
 
 // Custom Components
 export { default as Appbar } from './Appbar';

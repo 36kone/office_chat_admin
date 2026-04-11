@@ -1,6 +1,6 @@
-import { Bell, LogOut, User, MoreVertical, MessageSquare, Users, LayoutDashboard } from 'lucide-react';
+import { Bell, LogOut, User, MoreVertical, MessageSquare, Users, LayoutDashboard, Mail } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from './ui/dropdown-menu';
 import type { User as UserType } from '../types/types';
 import type { PageType } from '../App';
 
@@ -56,10 +56,31 @@ export default function Appbar({ user, onLogout, onNavigate, onProfile, currentP
       {/* Right side - User & Actions */}
       <div className="flex items-center gap-4">
         {/* Notifications */}
-        <button className="p-2 hover:bg-gray-50 rounded-full transition text-gray-500 relative group">
-          <Bell className="w-5 h-5 group-hover:scale-110 transition-transform" />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-        </button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="p-2 hover:bg-gray-50 rounded-full transition text-gray-500 relative group focus:outline-none">
+              <Bell className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-80 p-0 overflow-hidden border-none shadow-2xl rounded-2xl">
+            <div className="bg-[#1a1a1a] p-4 flex items-center justify-between">
+              <h3 className="text-white font-bold text-lg">Notificações</h3>
+              <Mail className="w-5 h-5 text-gray-400 cursor-pointer hover:text-white transition-colors" />
+            </div>
+            <div className="bg-white p-8 flex flex-col items-center justify-center text-center gap-4">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                <Bell className="w-8 h-8 text-gray-400" />
+              </div>
+              <div className="space-y-1">
+                <p className="font-bold text-gray-900 text-lg">Sem notificações</p>
+                <p className="text-sm text-gray-500 leading-relaxed px-4">
+                  Quando você tiver notificações, elas aparecerão aqui.
+                </p>
+              </div>
+            </div>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         <div className="h-8 w-[1px] bg-gray-200 mx-1 hidden sm:block"></div>
 

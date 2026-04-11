@@ -212,7 +212,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                                 </div>
                             </div>
 
-                            <Button type="submit" className="w-full" disabled={isLoading}>
+                            <Button type="submit" className="w-full text-white font-bold" disabled={isLoading}>
                                 {isLoading ? <RefreshCw className="mr-2 h-4 w-4 animate-spin"/> : "Entrar"}
                             </Button>
                         </form>
@@ -243,14 +243,14 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                             </div>
 
                             <div className="flex flex-col gap-2">
-                                <Button type="submit" className="w-full" disabled={isLoading}>
+                                <Button type="submit" className="w-full text-white font-bold" disabled={isLoading}>
                                     {isLoading ? <RefreshCw className="mr-2 h-4 w-4 animate-spin"/> : "Verificar"}
                                 </Button>
                                 <Button
                                     type="button"
                                     variant="ghost"
                                     onClick={handleBackToLogin}
-                                    className="w-full"
+                                    className="w-full font-bold"
                                 >
                                     Voltar para o Login
                                 </Button>
@@ -263,8 +263,8 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                 <Dialog open={isTwoFactorDialogOpen} onOpenChange={setIsTwoFactorDialogOpen}>
                     <DialogContent className="sm:max-w-md">
                         <DialogHeader>
-                            <DialogTitle>Configurar Autenticação 2FA</DialogTitle>
-                            <DialogDescription>
+                            <DialogTitle className="text-white">Configurar Autenticação 2FA</DialogTitle>
+                            <DialogDescription className="text-white/80">
                                 Escaneie o código QR abaixo com seu aplicativo de autenticação (Google Authenticator, Authy, etc.)
                             </DialogDescription>
                         </DialogHeader>
@@ -303,7 +303,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                             <Button variant="ghost" onClick={() => setIsTwoFactorDialogOpen(false)}>
                                 Cancelar
                             </Button>
-                            <Button onClick={handleTwoFactorSetup} disabled={isLoading}>
+                            <Button onClick={handleTwoFactorSetup} disabled={isLoading} className="text-white font-bold">
                                 Ativar 2FA
                             </Button>
                         </DialogFooter>
