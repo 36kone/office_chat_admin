@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import type { AppContextType } from '../App';
-import type { User } from '../types/types';
-import { Card, CardContent } from '../components/ui/card';
-import { Input } from '../components/ui/input';
-import { Button } from '../components/ui/button';
+import { useNavigate } from 'react-router-dom';
+import type { AppContextType } from '../../App';
+import type { User } from '../../types/types';
+import { Card, CardContent, Input, Button } from '../../components';
 import { Search, UserPlus, MessageCircle } from 'lucide-react';
 
 interface UsersPageProps {
@@ -11,6 +10,7 @@ interface UsersPageProps {
 }
 
 export function UsersPage({ }: UsersPageProps) {
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [users] = useState<User[]>([
     { id: '1', name: 'João Silva', email: 'joao@empresa.com', avatar: '👨‍💼' },
@@ -55,7 +55,12 @@ export function UsersPage({ }: UsersPageProps) {
                   <p className="text-sm text-gray-500">{user.email}</p>
                 </div>
               </div>
-              <Button variant="ghost" size="icon" className="rounded-full hover:bg-green-50 text-green-600">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="rounded-full hover:bg-green-50 text-green-600"
+                onClick={() => navigate('/chats', { state: { userId: user.id } })}
+              >
                 <MessageCircle className="h-6 w-6" />
               </Button>
             </CardContent>

@@ -33,4 +33,7 @@ export interface Conversation {
     timestamp: Date;
   };
   unreadCount?: number;
+  status?: string;
+  tag?: string;
+  time?: string;
 }

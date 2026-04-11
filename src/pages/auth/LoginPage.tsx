@@ -18,10 +18,10 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger
-} from "../components"
+} from "../../components"
 import { Eye, EyeOff, Mail, Lock, Shield, Copy, RefreshCw } from "lucide-react"
 import { QRCodeSVG } from "qrcode.react"
-import { useToast } from "../hooks/use-toast"
+import { useToast } from "../../hooks/use-toast"
 
 interface LoginPageProps {
     onLogin: (email: string, pass: string) => void;

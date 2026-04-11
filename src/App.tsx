@@ -1,6 +1,8 @@
 import { useState, createContext, useContext, type ReactNode } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { ChatsPage, LoginPage, UsersPage, ProfilePage, DashboardPage } from './pages';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
 import Appbar from './components/Appbar';
 import type { User } from './types/types';
 
@@ -27,7 +29,7 @@ const useAppValue = () => {
 
 // --- Layout Wrapper ---
 const Layout = ({ children }: { children: ReactNode }) => {
-  const { user, setIsAuthenticated, setCurrentPage, setUser } = useAppValue();
+  const { user, setIsAuthenticated, setCurrentPage, setUser, currentPage } = useAppValue();
   const navigate = useNavigate();
 
   if (!user) return <Navigate to="/login" replace />;
@@ -51,6 +53,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
         onLogout={handleLogout}
         onNavigate={handleNavigate}
         onProfile={() => handleNavigate('profile')}
+        currentPage={currentPage}
       />
       <main>{children}</main>
     </div>
@@ -97,6 +100,8 @@ function App() {
               isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage onLogin={handleLogin} />
             } 
           />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           
           {/* Protected Routes */}
           <Route
