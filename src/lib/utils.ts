@@ -90,6 +90,21 @@ export function formatCPF (value: string) {
     return digits
 }
 
+export function formatCellphone(v?: string | null): string {
+  const digits = onlyDigits(v);
+  if (!digits) return "-";
+  
+  if (digits.length === 11) {
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+  }
+  
+  if (digits.length === 10) {
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+  }
+
+  return digits;
+}
+
 export function formatDocument (v?: string | null) {
     const onlyDigits = (v?: string | null) => (v ?? "").replace(/\D/g, "")
     const d = onlyDigits(v)

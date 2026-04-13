@@ -134,7 +134,7 @@ class AuthService {
 
     enable2FA(code: string, token: string): Promise<void> {
         return apiService.post<void>(
-            "/v1/auth/enable-2fa",
+            "/v1/auth/me/enable-2fa",
             {code},
             {
                 baseURL: Config.API_BASE_URL,
