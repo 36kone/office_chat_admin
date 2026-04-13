@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import type { AppContextType } from '../../App';
-import type { Conversation, Message, User } from '../../types/types';
-import { Input, Button, Badge, Avatar, AvatarFallback, AvatarImage } from '../../components';
-import { Send, Search, Plus, Filter, Paperclip, Smile, Mic, PaperclipIcon, FileText, Image as ImageIcon } from 'lucide-react';
+import type { Conversation, Message } from '../../types/types';
+import { Input, Button, Avatar, AvatarFallback } from '../../components';
+import { Send, Search, Plus, Filter, Smile, Mic, PaperclipIcon, FileText } from 'lucide-react';
 
 interface ChatsPageProps {
-  pageContext: AppContextType;
+  pageContext: unknown;
 }
 
-export function ChatsPage({ }: ChatsPageProps) {
+export function ChatsPage({ pageContext: _pageContext }: ChatsPageProps) {
   const location = useLocation();
   const [selectedChat, setSelectedChat] = useState<Conversation | null>(null);
   const [message, setMessage] = useState('');
@@ -115,14 +114,6 @@ export function ChatsPage({ }: ChatsPageProps) {
     if (!message.trim()) return;
     console.log('Sending message:', message);
     setMessage('');
-  };
-
-  const getStatusColor = (status?: string) => {
-    switch (status) {
-      case 'Aguardando': return 'bg-red-500 hover:bg-red-600';
-      case 'Em Atendimento': return 'bg-yellow-500 hover:bg-yellow-600';
-      default: return 'bg-gray-500';
-    }
   };
 
   return (

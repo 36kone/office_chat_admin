@@ -19,7 +19,7 @@ export function DashboardPage() {
   return (
     <div className="p-8 max-w-6xl mx-auto space-y-8">
       <div className="flex flex-col space-y-1">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-800">Bem-vindo de volta, Admin! 👋</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">Bem-vindo de volta, Admin! 👋</h1>
         <p className="text-muted-foreground text-lg">Aqui está um resumo do que aconteceu hoje.</p>
       </div>
 
@@ -35,7 +35,7 @@ export function DashboardPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-gray-800">{stat.value}</div>
+              <div className="text-2xl font-bold text-foreground">{stat.value}</div>
               <p className="text-xs text-muted-foreground mt-1">
                 <span className="text-green-500 font-medium">+12%</span> em relação ao mês passado
               </p>
@@ -51,22 +51,22 @@ export function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             {recentActivity.map((activity, i) => (
-              <div key={i} className="flex items-center justify-between text-sm border-b border-gray-100 pb-3 last:border-0 last:pb-0">
+              <div key={i} className="flex items-center justify-between text-sm border-b border-border pb-3 last:border-0 last:pb-0">
                 <div className="flex flex-col">
-                  <span className="font-semibold text-gray-800">{activity.user}</span>
+                  <span className="font-semibold text-foreground">{activity.user}</span>
                   <span className="text-muted-foreground">
-                    {activity.action} <span className="font-medium text-gray-700">{activity.target}</span>
+                    {activity.action} <span className="font-medium text-foreground">{activity.target}</span>
                   </span>
                 </div>
-                <span className="text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded-full">{activity.time}</span>
+                <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full">{activity.time}</span>
               </div>
             ))}
           </CardContent>
         </Card>
 
-        <Card className="bg-black text-white">
+        <Card className="bg-primary text-primary-foreground">
           <CardHeader>
-            <CardTitle className="text-white">Status do Sistema</CardTitle>
+            <CardTitle className="text-primary-foreground">Status do Sistema</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-center justify-center p-8 space-y-6">
             <div className="relative">
@@ -76,7 +76,7 @@ export function DashboardPage() {
             </div>
             <div className="text-center space-y-2">
               <h3 className="text-xl font-bold">Todos os serviços operacionais</h3>
-              <p className="text-gray-400 text-sm">Próxima manutenção agendada para Domingo, 02:00 AM</p>
+              <p className="text-primary-foreground/80 text-sm">Próxima manutenção agendada para Domingo, 02:00 AM</p>
             </div>
           </CardContent>
         </Card>

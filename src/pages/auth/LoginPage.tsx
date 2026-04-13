@@ -1,35 +1,27 @@
-import React, {useState} from "react"
-import {Link, useNavigate} from "react-router-dom"
-import {Button} from "@/components/ui/button"
-import {Input} from "@/components/ui/input"
-import {Label} from "@/components/ui/label"
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card"
-import {Alert, AlertDescription} from "@/components/ui/alert"
-import {Eye, EyeOff, Mail, Lock, Shield, Copy, RefreshCw} from "lucide-react"
-import {useAuth} from "@/contexts/AuthContext"
+import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Eye, EyeOff, Mail, Lock, Shield, Copy, RefreshCw, MessageSquare } from "lucide-react"
+import { useAuth } from "@/contexts/AuthContext"
 import authService from "@/services/auth/auth.service"
-import {useApp} from "@/contexts/AppContext.tsx";
-import type {UserTypes} from "@/types/user/user.types";
 import {
     Dialog,
     DialogContent,
     DialogDescription,
     DialogFooter,
     DialogHeader,
-    DialogTitle,
-    DialogTrigger
+    DialogTitle
 } from "@/components/ui/dialog.tsx";
-import {QRCodeSVG} from "qrcode.react";
-import {toast} from "@/components/ui/use-toast";
+import { QRCodeSVG } from "qrcode.react";
+import { toast } from "@/components/ui/use-toast";
 
-interface LoginPageProps {
-    onLogin: (email: string, pass: string) => void;
-}
-
-export function LoginPage({ onLogin }: LoginPageProps) {
+export function LoginPage() {
     const navigate = useNavigate()
-    const {login, confirm2FA} = useAuth()
-    const {setIsLoading: setAppLoading} = useApp()
+    const { login, confirm2FA } = useAuth()
 
     const [isTwoFactorDialogOpen, setIsTwoFactorDialogOpen] = useState(false)
     const [qrCodeUrl, setQrCodeUrl] = useState('')
@@ -42,7 +34,6 @@ export function LoginPage({ onLogin }: LoginPageProps) {
 
     const [isTwoFactor, setIsTwoFactor] = useState(false)
     const [twoFactorCode, setTwoFactorCode] = useState("")
-    const [currentUser, setCurrentUser] = useState<UserTypes | null>(null)
 
     const [formData, setFormData] = useState({
         email: "",
@@ -74,7 +65,6 @@ export function LoginPage({ onLogin }: LoginPageProps) {
 
                 if (authData?.token_role === "mfa") {
                     localStorage.setItem("temp_auth_token", authData.access_token);
-                    setCurrentUser(authData.user ?? null);
                     setIsTwoFactor(true);
                     return;
                 }
@@ -148,17 +138,6 @@ export function LoginPage({ onLogin }: LoginPageProps) {
         }
     }
 
-    const generateNewSecret = async () => {
-        try {
-            const data = await authService.getQRCodeUrl()
-
-            setQrCodeUrl(data.otpauth_url)
-            setBackupCode(data.otp_secret)
-        } catch (error) {
-            console.error('Erro ao gerar nova chave secreta', error)
-        }
-    }
-
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text)
@@ -171,7 +150,6 @@ export function LoginPage({ onLogin }: LoginPageProps) {
     const handleBackToLogin = () => {
         setIsTwoFactor(false);
         setTwoFactorCode("");
-        setCurrentUser(null);
         setError("");
         setIsLoading(false);
     };
@@ -182,8 +160,14 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                 <CardHeader className="space-y-1 text-center">
                     <div className="flex justify-center mb-4">
                         <div className="w-48 h-16 flex items-center justify-center">
-                            {/* SVG Logo Office Chat conforme solicitado */}
-                            
+                            <div className="flex items-center gap-8">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
+                                        <MessageSquare className="w-5 h-5 text-white" />
+                                    </div>
+                                    <span className="font-bold text-xl tracking-tight">Office Chat</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     {isTwoFactor && (
@@ -211,12 +195,12 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                             <div className="space-y-2">
                                 <Label htmlFor="email">E-mail</Label>
                                 <div className="relative">
-                                    <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground"/>
+                                    <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                                     <Input
                                         id="email"
                                         type="email"
                                         value={formData.email}
-                                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                         placeholder="seu@email.com"
                                         className="pl-9"
                                         required
@@ -227,12 +211,12 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                             <div className="space-y-2">
                                 <Label htmlFor="password">Senha</Label>
                                 <div className="relative">
-                                    <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground"/>
+                                    <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                                     <Input
                                         id="password"
                                         type={showPassword ? "text" : "password"}
                                         value={formData.password}
-                                        onChange={(e) => setFormData({...formData, password: e.target.value})}
+                                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                         placeholder="••••••••"
                                         className="pl-9 pr-9"
                                         required
@@ -240,15 +224,15 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                                        className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
                                     >
-                                        {showPassword ? <EyeOff className="h-4 w-4"/> : <Eye className="h-4 w-4"/>}
+                                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                                     </button>
                                 </div>
                             </div>
 
-                            <Button type="submit" className="w-full text-white font-bold" disabled={isLoading}>
-                                {isLoading ? <RefreshCw className="mr-2 h-4 w-4 animate-spin"/> : "Entrar"}
+                            <Button type="submit" className="w-full font-bold" disabled={isLoading}>
+                                {isLoading ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : "Entrar"}
                             </Button>
                         </form>
                     ) : (
@@ -263,7 +247,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                             <div className="space-y-2">
                                 <Label htmlFor="twoFactorCode">Código de Verificação</Label>
                                 <div className="relative">
-                                    <Shield className="absolute left-3 top-3 h-4 w-4 text-muted-foreground"/>
+                                    <Shield className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                                     <Input
                                         id="twoFactorCode"
                                         type="text"
@@ -278,8 +262,8 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                             </div>
 
                             <div className="flex flex-col gap-2">
-                                <Button type="submit" className="w-full text-white font-bold" disabled={isLoading}>
-                                    {isLoading ? <RefreshCw className="mr-2 h-4 w-4 animate-spin"/> : "Verificar"}
+                                <Button type="submit" className="w-full font-bold" disabled={isLoading}>
+                                    {isLoading ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : "Verificar"}
                                 </Button>
                                 <Button
                                     type="button"
@@ -298,19 +282,19 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                 <Dialog open={isTwoFactorDialogOpen} onOpenChange={setIsTwoFactorDialogOpen}>
                     <DialogContent className="sm:max-w-md">
                         <DialogHeader>
-                            <DialogTitle className="text-white">Configurar Autenticação 2FA</DialogTitle>
-                            <DialogDescription className="text-white/80">
+                            <DialogTitle>Configurar Autenticação 2FA</DialogTitle>
+                            <DialogDescription>
                                 Escaneie o código QR abaixo com seu aplicativo de autenticação (Google Authenticator, Authy, etc.)
                             </DialogDescription>
                         </DialogHeader>
-                        
+
                         <div className="flex flex-col items-center space-y-4 p-4">
                             {qrCodeUrl && (
-                                <div className="bg-white p-4 rounded-lg shadow-sm border">
+                                <div className="bg-card p-4 rounded-lg shadow-sm border border-border">
                                     <QRCodeSVG value={qrCodeUrl} size={200} />
                                 </div>
                             )}
-                            
+
                             <div className="w-full space-y-2">
                                 <Label>Código de Backup (Se não conseguir escanear)</Label>
                                 <div className="flex gap-2">
@@ -338,7 +322,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                             <Button variant="ghost" onClick={() => setIsTwoFactorDialogOpen(false)}>
                                 Cancelar
                             </Button>
-                            <Button onClick={handleTwoFactorSetup} disabled={isLoading} className="text-white font-bold">
+                            <Button onClick={handleTwoFactorSetup} disabled={isLoading} className="font-bold">
                                 Ativar 2FA
                             </Button>
                         </DialogFooter>

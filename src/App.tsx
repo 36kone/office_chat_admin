@@ -25,7 +25,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Appbar
         user={user}
         onLogout={handleLogout}
@@ -39,11 +39,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
 
 // --- App Component ---
 function App() {
-  const { isAuthenticated, login } = useAuth();
-
-  const handleLogin = (email: string, pass: string) => {
-    login({ email, password: pass });
-  };
+  const { isAuthenticated } = useAuth();
 
   return (
     <BrowserRouter>
@@ -52,7 +48,7 @@ function App() {
         <Route 
           path="/login" 
           element={
-            isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage onLogin={handleLogin} />
+            isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage />
           } 
         />
         <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -67,8 +63,8 @@ function App() {
                 <Route path="/" element={<Navigate to="/dashboard" replace />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/chats" element={<ChatsPage pageContext={{ page: 'chats' }} />} />
-                <Route path="/users" element={<UsersPage pageContext={{ page: 'users' }} />} />
-                <Route path="/profile" element={<ProfilePage pageContext={{ page: 'profile' }} />} />
+                <Route path="/users" element={<UsersPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />
               </Routes>
             </Layout>

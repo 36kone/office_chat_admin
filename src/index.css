@@ -6,7 +6,9 @@
   --color-primary: #000000;
   --color-primary-foreground: #ffffff;
   --color-secondary: #f1f5f9;
+  --color-secondary-foreground: #0f172a;
   --color-accent: #22c55e;
+  --color-accent-foreground: #052e16;
   --color-muted: #f1f5f9;
   --color-muted-foreground: #64748b;
   --color-card: #ffffff;
@@ -22,6 +24,26 @@
   --radius-sm: calc(0.5rem - 4px);
 }
 
+.dark {
+  --color-background: #000000;
+  --color-foreground: #f8fafc;
+  --color-primary: #22c55e;
+  --color-primary-foreground: #052e16;
+  --color-secondary: #0b0b0b;
+  --color-secondary-foreground: #f8fafc;
+  --color-accent: #22c55e;
+  --color-accent-foreground: #052e16;
+  --color-muted: #0b0b0b;
+  --color-muted-foreground: #94a3b8;
+  --color-card: #0b0b0b;
+  --color-card-foreground: #f8fafc;
+  --color-popover: #0b0b0b;
+  --color-popover-foreground: #f8fafc;
+  --color-border: #1f2937;
+  --color-input: #1f2937;
+  --color-ring: #22c55e;
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
@@ -30,6 +52,25 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: system-ui, sans-serif;
+  }
+
+  .dark .bg-white {
+    background-color: var(--color-background) !important;
+  }
+  .dark :is(.bg-gray-50, .bg-gray-100, .bg-gray-200) {
+    background-color: var(--color-muted) !important;
+  }
+  .dark :is([class*="bg-gray-50/"], [class*="bg-gray-100/"], [class*="bg-gray-200/"]) {
+    background-color: var(--color-muted) !important;
+  }
+  .dark :is(.border-gray-50, .border-gray-100, .border-gray-200) {
+    border-color: var(--color-border) !important;
+  }
+  .dark :is(.text-gray-900, .text-gray-800, .text-gray-700) {
+    color: var(--color-foreground) !important;
+  }
+  .dark :is(.text-gray-600, .text-gray-500, .text-gray-400) {
+    color: var(--color-muted-foreground) !important;
   }
 }
 

@@ -2,10 +2,10 @@ import React, {useEffect, useState} from "react"
 import {useNavigate, useSearchParams} from "react-router-dom"
 import {Button, Input, Label, Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components"
 import {Eye, EyeOff, Lock} from "lucide-react"
-import type {authService} from "@/services/auth/auth.service"
+import authService from "@/services/auth/auth.service"
 import type {ConfirmResetPasswordData} from "@/types/auth/auth.types"
 import {useToast} from "@/hooks/use-toast.ts"
-import type {getErrorMessage} from "@/lib/error.ts";
+import { getErrorMessage } from "@/lib/error.ts";
 
 export default function ResetPassword() {
     const navigate = useNavigate()
@@ -29,7 +29,7 @@ export default function ResetPassword() {
                 variant: "destructive",
             })
         }
-    }, [token])
+    }, [token, toast])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()

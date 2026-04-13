@@ -24,6 +24,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { Copy, RefreshCw, Shield, ShieldCheck, Loader2 } from 'lucide-react';
 import authService from '@/services/auth/auth.service';
 import { Badge } from '@/components/ui/badge';
+import { getErrorMessage } from '@/lib/utils';
 
 interface ProfileMFADialogProps {
   mfaEnabled: boolean;
@@ -43,10 +44,10 @@ export function ProfileMFADialog({ mfaEnabled, onStatusChange }: ProfileMFADialo
       const data = await authService.getQRCodeUrl();
       setQrCodeData(data);
       setIsOpen(true);
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Erro ao configurar 2FA",
-        description: error.message || "Não foi possível gerar o QR Code.",
+        description: getErrorMessage(error) || "Não foi possível gerar o QR Code.",
         variant: "destructive",
       });
     } finally {
@@ -81,10 +82,10 @@ export function ProfileMFADialog({ mfaEnabled, onStatusChange }: ProfileMFADialo
       onStatusChange(true);
       setIsOpen(false);
       setVerificationCode('');
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Erro ao ativar o 2FA",
-        description: error.message || "Código de verificação incorreto.",
+        description: getErrorMessage(error) || "Código de verificação incorreto.",
         variant: "destructive",
       });
     } finally {
@@ -104,10 +105,10 @@ export function ProfileMFADialog({ mfaEnabled, onStatusChange }: ProfileMFADialo
 
       onStatusChange(false);
       setIsDisableAlertOpen(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Erro ao desativar o 2FA",
-        description: error.message || "Não foi possível desativar o 2FA.",
+        description: getErrorMessage(error) || "Não foi possível desativar o 2FA.",
         variant: "destructive",
       });
     } finally {
@@ -131,16 +132,16 @@ export function ProfileMFADialog({ mfaEnabled, onStatusChange }: ProfileMFADialo
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="space-y-0.5">
-          <h4 className="text-sm font-bold text-gray-800 flex items-center gap-2">
+          <h4 className="text-sm font-bold text-foreground flex items-center gap-2">
             Autenticação de Dois Fatores
             {mfaEnabled && (
-              <Badge className="bg-green-100 text-green-700 border-green-200 hover:bg-green-100 text-[9px] font-black uppercase tracking-wider">
+              <Badge className="bg-accent/10 text-accent border-accent/20 hover:bg-accent/10 text-[9px] font-black uppercase tracking-wider">
                 <ShieldCheck className="w-3 h-3 mr-1" />
                 Ativo
               </Badge>
             )}
           </h4>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-muted-foreground">
             {mfaEnabled 
               ? "Sua conta está protegida com uma camada extra de segurança." 
               : "Adicione mais segurança exigindo um código do seu celular ao entrar."}
@@ -151,7 +152,7 @@ export function ProfileMFADialog({ mfaEnabled, onStatusChange }: ProfileMFADialo
       {!mfaEnabled ? (
         <Button 
           variant="outline" 
-          className="w-full h-11 rounded-xl gap-2 font-bold border-2 hover:bg-gray-50 transition-all active:scale-[0.98]"
+          className="w-full h-11 rounded-xl gap-2 font-bold border-2 hover:bg-muted transition-all active:scale-[0.98]"
           onClick={handleEnableClick}
           disabled={isLoading}
         >
@@ -182,12 +183,12 @@ export function ProfileMFADialog({ mfaEnabled, onStatusChange }: ProfileMFADialo
 
           <div className="space-y-6 py-4">
             <div className="space-y-3">
-              <h4 className="text-sm font-bold text-gray-700">1. Escaneie o QR Code</h4>
-              <p className="text-xs text-gray-500">
+              <h4 className="text-sm font-bold text-foreground">1. Escaneie o QR Code</h4>
+              <p className="text-xs text-muted-foreground">
                 Use um app como Google Authenticator ou Authy para escanear.
               </p>
-              <div className="bg-gray-50 p-6 rounded-2xl flex items-center justify-center border border-gray-100 shadow-inner">
-                <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+              <div className="bg-muted p-6 rounded-2xl flex items-center justify-center border border-border shadow-inner">
+                <div className="bg-card p-4 rounded-xl shadow-sm border border-border">
                   {qrCodeData?.otpauth_url ? (
                     <QRCodeSVG 
                       value={qrCodeData.otpauth_url} 
@@ -196,7 +197,7 @@ export function ProfileMFADialog({ mfaEnabled, onStatusChange }: ProfileMFADialo
                       includeMargin
                     />
                   ) : (
-                    <div className="w-[160px] h-[160px] flex items-center justify-center text-gray-400">
+                    <div className="w-[160px] h-[160px] flex items-center justify-center text-muted-foreground">
                       <Loader2 className="h-8 w-8 animate-spin" />
                     </div>
                   )}
@@ -205,9 +206,9 @@ export function ProfileMFADialog({ mfaEnabled, onStatusChange }: ProfileMFADialo
             </div>
 
             <div className="space-y-3">
-              <h4 className="text-sm font-bold text-gray-700">2. Código Manual (Alternativa)</h4>
-              <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-xl border border-gray-100">
-                <code className="flex-1 text-xs font-mono font-bold text-indigo-600 text-center tracking-wider">
+              <h4 className="text-sm font-bold text-foreground">2. Código Manual (Alternativa)</h4>
+              <div className="flex items-center gap-2 p-3 bg-muted rounded-xl border border-border">
+                <code className="flex-1 text-xs font-mono font-bold text-accent text-center tracking-wider">
                   {qrCodeData?.otp_secret || "CARREGANDO..."}
                 </code>
                 <Button 
@@ -217,7 +218,7 @@ export function ProfileMFADialog({ mfaEnabled, onStatusChange }: ProfileMFADialo
                   className="h-8 w-8 rounded-lg"
                   onClick={() => qrCodeData?.otp_secret && copyToClipboard(qrCodeData.otp_secret)}
                 >
-                  <Copy className="w-4 h-4 text-gray-500" />
+                  <Copy className="w-4 h-4 text-muted-foreground" />
                 </Button>
                 <Button 
                   type="button" 
@@ -226,22 +227,22 @@ export function ProfileMFADialog({ mfaEnabled, onStatusChange }: ProfileMFADialo
                   className="h-8 w-8 rounded-lg"
                   onClick={generateNewSecret}
                 >
-                  <RefreshCw className="w-4 h-4 text-gray-500" />
+                  <RefreshCw className="w-4 h-4 text-muted-foreground" />
                 </Button>
               </div>
             </div>
 
             <form onSubmit={handleSetup2FA} className="space-y-4">
               <div className="space-y-3">
-                <h4 className="text-sm font-bold text-gray-700">3. Digite o código de verificação</h4>
+                <h4 className="text-sm font-bold text-foreground">3. Digite o código de verificação</h4>
                 <Input 
                   value={verificationCode} 
                   onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))} 
                   placeholder="000000" 
-                  className="h-12 text-center text-2xl font-black tracking-[0.5em] rounded-xl bg-gray-50 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
+                  className="h-12 text-center text-2xl font-black tracking-[0.5em] rounded-xl bg-muted border-border focus:border-accent focus:ring-accent"
                   required
                 />
-                <p className="text-[10px] text-gray-400 text-center italic">
+                <p className="text-[10px] text-muted-foreground text-center italic">
                   Digite o código de 6 dígitos gerado pelo seu aplicativo.
                 </p>
               </div>
@@ -257,7 +258,7 @@ export function ProfileMFADialog({ mfaEnabled, onStatusChange }: ProfileMFADialo
                 </Button>
                 <Button 
                   type="submit" 
-                  className="flex-1 h-11 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-md"
+                  className="flex-1 h-11 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-md"
                   disabled={isLoading || verificationCode.length !== 6}
                 >
                   {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <ShieldCheck className="h-4 w-4 mr-2" />}
