@@ -11,7 +11,8 @@
     /* Path aliases */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@config": ["./src/config..ts"]
     },
 
     /* Bundler mode */

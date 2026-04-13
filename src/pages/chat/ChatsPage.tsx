@@ -20,11 +20,11 @@ export function ChatsPage({ }: ChatsPageProps) {
   const [conversations] = useState<Conversation[]>([
     {
       id: '1',
-      name: 'Vagner Santos',
+      name: 'Usuário 1',
       avatar: 'VS',
       isGroup: false,
       lastMessage: {
-        sender: { name: 'Vagner Santos' },
+        sender: { name: 'Usuário 1' },
         content: 'Bibibi',
         timestamp: new Date(),
       },
@@ -34,11 +34,11 @@ export function ChatsPage({ }: ChatsPageProps) {
     },
     {
       id: '2',
-      name: 'Vagner Santos',
+      name: 'Usuário 2',
       avatar: 'VS',
       isGroup: false,
       lastMessage: {
-        sender: { name: 'Vagner Santos' },
+        sender: { name: 'Usuário 2' },
         content: 'Bem vindo a Mobiq, como podemos te ajudar?',
         timestamp: new Date(Date.now() - 7200000),
       },
@@ -48,11 +48,11 @@ export function ChatsPage({ }: ChatsPageProps) {
     },
     {
       id: '3',
-      name: 'caio herrera',
+      name: 'Usuário 3',
       avatar: 'CH',
       isGroup: false,
       lastMessage: {
-        sender: { name: 'caio herrera' },
+        sender: { name: 'Usuário 3' },
         content: 'Olá! Informamos que sua visita técnica...',
         timestamp: new Date(Date.now() - 3600000 * 8),
       },
@@ -62,11 +62,11 @@ export function ChatsPage({ }: ChatsPageProps) {
     },
     {
       id: '4',
-      name: 'rodrigo tadeu victorino',
+      name: 'Usuário 4',
       avatar: 'RV',
       isGroup: false,
       lastMessage: {
-        sender: { name: 'rodrigo tadeu victorino' },
+        sender: { name: 'Usuário 4' },
         content: 'Olá, rodrigo tadeu victorino! Tudo bem?',
         timestamp: new Date(Date.now() - 3600000 * 15),
       },
@@ -79,26 +79,26 @@ export function ChatsPage({ }: ChatsPageProps) {
   const [messages] = useState<Message[]>([
     {
       id: '1',
-      sender: { id: '1', name: 'Vagner Santos', avatar: 'VS' },
+      sender: { id: '1', name: 'Usuário 1', avatar: 'VS' },
       content: 'ola',
       timestamp: new Date('2026-03-31T21:10:00'),
     },
     {
       id: '2',
-      sender: { id: '1', name: 'Vagner Santos', avatar: 'VS' },
+      sender: { id: '1', name: 'Usuário 1', avatar: 'VS' },
       content: 'e ai',
       timestamp: new Date('2026-03-31T21:39:00'),
     },
     {
       id: '3',
-      sender: { id: '1', name: 'Vagner Santos', avatar: 'VS' },
+      sender: { id: '1', name: 'Usuário 1', avatar: 'VS' },
       content: 'dxx',
       timestamp: new Date('2026-03-31T21:39:00'),
     },
     {
       id: '4',
       sender: { id: 'me', name: 'Eu', avatar: 'Eu' },
-      content: 'Olá Vagner Santos, seja muito bem-vindo(a) à plataforma Chatverse! 🚀\n\nEstamos muito felizes por ter você a bordo. Prepare-se para transformar a comunicação com seus clientes e elevar seus resultados a um novo patamar.',
+      content: 'Olá Usuário 1, seja muito bem-vindo(a) à plataforma Chatverse! 🚀\n\nEstamos muito felizes por ter você a bordo. Prepare-se para transformar a comunicação com seus clientes e elevar seus resultados a um novo patamar.',
       timestamp: new Date('2026-03-31T20:39:00'),
     },
   ]);

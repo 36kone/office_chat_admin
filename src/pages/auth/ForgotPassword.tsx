@@ -2,7 +2,7 @@ import {useState} from "react";
 import {Link} from "react-router-dom";
 import {Button, Input, Label, Card, CardContent, CardDescription, CardHeader, CardTitle, Alert, AlertDescription} from "@/components";
 import {Mail, ArrowLeft, CheckCircle} from "lucide-react";
-import type {authService} from "@/services/auth/authService";
+import type {authService} from "@/services/auth/auth.service";
 
 export default function ForgotPassword() {
     const [email, setEmail] = useState("");

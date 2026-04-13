@@ -2,8 +2,8 @@ import React, {useEffect, useState} from "react"
 import {useNavigate, useSearchParams} from "react-router-dom"
 import {Button, Input, Label, Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components"
 import {Eye, EyeOff, Lock} from "lucide-react"
-import type {authService} from "@/services/auth/authService.ts"
-import type {ConfirmResetPasswordData} from "@/types/auth/authTypes.ts"
+import type {authService} from "@/services/auth/auth.service"
+import type {ConfirmResetPasswordData} from "@/types/auth/auth.types"
 import {useToast} from "@/hooks/use-toast.ts"
 import type {getErrorMessage} from "@/lib/error.ts";
 

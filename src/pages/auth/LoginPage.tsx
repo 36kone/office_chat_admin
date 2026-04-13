@@ -1,16 +1,16 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { 
-    Button, 
-    Input, 
-    Label, 
-    Card, 
-    CardContent, 
-    CardDescription, 
-    CardHeader, 
-    CardTitle,
-    Alert,
-    AlertDescription,
+import React, {useState} from "react"
+import {Link, useNavigate} from "react-router-dom"
+import {Button} from "@/components/ui/button"
+import {Input} from "@/components/ui/input"
+import {Label} from "@/components/ui/label"
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card"
+import {Alert, AlertDescription} from "@/components/ui/alert"
+import {Eye, EyeOff, Mail, Lock, Shield, Copy, RefreshCw} from "lucide-react"
+import {useAuth} from "@/contexts/AuthContext"
+import authService from "@/services/auth/auth.service"
+import {useApp} from "@/contexts/AppContext.tsx";
+import type {UserTypes} from "@/types/user/user.types";
+import {
     Dialog,
     DialogContent,
     DialogDescription,
@@ -18,10 +18,9 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger
-} from "../../components"
-import { Eye, EyeOff, Mail, Lock, Shield, Copy, RefreshCw } from "lucide-react"
-import { QRCodeSVG } from "qrcode.react"
-import { useToast } from "../../hooks/use-toast"
+} from "@/components/ui/dialog.tsx";
+import {QRCodeSVG} from "qrcode.react";
+import {toast} from "@/components/ui/use-toast";
 
 interface LoginPageProps {
     onLogin: (email: string, pass: string) => void;
@@ -29,7 +28,8 @@ interface LoginPageProps {
 
 export function LoginPage({ onLogin }: LoginPageProps) {
     const navigate = useNavigate()
-    const { toast } = useToast()
+    const {login, confirm2FA} = useAuth()
+    const {setIsLoading: setAppLoading} = useApp()
 
     const [isTwoFactorDialogOpen, setIsTwoFactorDialogOpen] = useState(false)
     const [qrCodeUrl, setQrCodeUrl] = useState('')
@@ -42,6 +42,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
 
     const [isTwoFactor, setIsTwoFactor] = useState(false)
     const [twoFactorCode, setTwoFactorCode] = useState("")
+    const [currentUser, setCurrentUser] = useState<UserTypes | null>(null)
 
     const [formData, setFormData] = useState({
         email: "",
@@ -56,14 +57,29 @@ export function LoginPage({ onLogin }: LoginPageProps) {
         setError("");
 
         try {
-            // Mock de lógica baseada no exemplo do usuário
             if (!isTwoFactor) {
-                // Simula verificação inicial
-                console.log("Login inicial:", formData.email);
-                
-                // Exemplo de como o usuário lidaria com MFA no código fornecido
-                // Aqui vamos apenas chamar o onLogin do pai se não houver 2FA simulado
-                onLogin(formData.email, formData.password);
+                const authData = await login({
+                    email: formData.email,
+                    password: formData.password,
+                })
+
+                if (authData?.otpauth_url) {
+                    setQrCodeUrl(authData.otpauth_url || "")
+                    setBackupCode(authData.otp_secret || "")
+
+                    localStorage.setItem("temp_auth_token", authData.access_token || "")
+                    setIsTwoFactorDialogOpen(true)
+                    return
+                }
+
+                if (authData?.token_role === "mfa") {
+                    localStorage.setItem("temp_auth_token", authData.access_token);
+                    setCurrentUser(authData.user ?? null);
+                    setIsTwoFactor(true);
+                    return;
+                }
+
+                navigate("/");
                 return;
             }
 
@@ -71,10 +87,18 @@ export function LoginPage({ onLogin }: LoginPageProps) {
             if (!/^\d{6}$/.test(twoFactorCode))
                 throw new Error("O código deve ter 6 dígitos.");
 
-            console.log("Verificando 2FA:", twoFactorCode);
-            onLogin(formData.email, formData.password);
+            const finalData = await authService.verify2FA(twoFactorCode);
+            await confirm2FA(finalData);
+
+            navigate("/");
         } catch (err: any) {
-            setError(err.message || "Falha no login. Tente novamente.");
+            const status = err?.response?.status ?? err?.status;
+
+            if (status === 404) {
+                setError("E-mail ou senha incorretos.");
+            } else {
+                setError(err.message || "Falha no login. Tente novamente.");
+            }
         } finally {
             setIsLoading(false);
         }
@@ -86,7 +110,8 @@ export function LoginPage({ onLogin }: LoginPageProps) {
         if (!verificationCode) {
             toast({
                 title: "Código obrigatório",
-                description: "Digite o código de verificação do seu aplicativo"
+                description: "Digite o código de verificação do seu aplicativo",
+                variant: "destructive"
             })
             return
         }
@@ -94,13 +119,14 @@ export function LoginPage({ onLogin }: LoginPageProps) {
         if (verificationCode.length !== 6) {
             toast({
                 title: "Código inválido",
-                description: "O código deve ter 6 dígitos"
+                description: "O código deve ter 6 dígitos",
+                variant: "destructive"
             })
             return
         }
 
         try {
-            console.log("Configurando 2FA com código:", verificationCode);
+            const data = await authService.verify2FA(verificationCode);
             toast({
                 title: '2FA Ativado',
                 description: 'Autenticação de dois fatores foi ativada com sucesso.'
@@ -108,23 +134,31 @@ export function LoginPage({ onLogin }: LoginPageProps) {
 
             setIsTwoFactor(true)
             setIsTwoFactorDialogOpen(false)
+
+            if (data.user) {
+                localStorage.setItem('auth_user', JSON.stringify(data.user));
+            }
+
         } catch (error: any) {
             toast({
                 title: "Erro ao ativar o 2FA",
-                description: error.message
+                description: error.message || "",
+                variant: "destructive"
             });
         }
     }
 
     const generateNewSecret = async () => {
         try {
-            // Simula geração de novo QR Code
-            setQrCodeUrl("otpauth://totp/OfficeChat:admin@empresa.com?secret=JBSWY3DPEHPK3PXP&issuer=OfficeChat")
-            setBackupCode("JBSWY3DPEHPK3PXP")
+            const data = await authService.getQRCodeUrl()
+
+            setQrCodeUrl(data.otpauth_url)
+            setBackupCode(data.otp_secret)
         } catch (error) {
             console.error('Erro ao gerar nova chave secreta', error)
         }
     }
+
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text)
@@ -137,6 +171,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
     const handleBackToLogin = () => {
         setIsTwoFactor(false);
         setTwoFactorCode("");
+        setCurrentUser(null);
         setError("");
         setIsLoading(false);
     };
